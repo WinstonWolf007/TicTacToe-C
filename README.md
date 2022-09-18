@@ -9,3 +9,7 @@
 ## End Game
 ![Screenshot from 2022-09-18 13-10-53](https://user-images.githubusercontent.com/74386536/190919729-05f49c81-af3d-4e83-94f7-625337e0479b.png)
 ---
+# Bug
+
+If you are 1 V 1 for last case. The program crash. This problem is in main.c file line 157 in botChoice function.
+The function trying to find the last case but this is imposible, becose player have choised this case.
