@@ -1,12 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <string.h>
-
-
-typedef enum bool {
-    FALSE, TRUE
-} bool;
 
 char letter[] = {'A', 'B', 'C'};
 
@@ -125,17 +119,18 @@ int checkMatrix(int matrix[3][3]) {
 }
 
 int updateMatrix(int matrix[3][3], char choice[2]) {
+    // get choice[0] index in letter array
     int idx = 0;
-    char letter[3] = {'A', 'B', 'C'};
-
     for (idx; idx<3; idx++) {
         if (choice[0] == letter[idx]) {
             break;
         }
     }
 
+    // get value from matrix position
     int caseValue = matrix[((int)(choice[1]-'0')-1)][idx];
     
+    // verify if case is already busy
     if (caseValue == 1 || caseValue == 2) {
         return -1;
     }
@@ -145,6 +140,7 @@ int updateMatrix(int matrix[3][3], char choice[2]) {
 }
 
 int checkUserInput(char input[2]) {
+    // Verify if user input is correct [letter: uppercase][num]
     if (input[0] == 'A' || input[0] == 'B' || input[0] == 'C') {
         if (input[1] == '1' || input[1] == '2' || input[1] == '3') {
             return 1;
@@ -157,6 +153,7 @@ int botChoice(int matrix[3][3]) {
     int y;
     int x;
 
+    // check all posibility in matrix. if is equal to 0. Pick this position
     while (1) {
         srand((unsigned) time(&t));
 
@@ -168,6 +165,7 @@ int botChoice(int matrix[3][3]) {
         }
     }
     
+    // convert string to int
     char s1 = y+'0';
     char s2 = x+'0';
 
@@ -177,6 +175,7 @@ int botChoice(int matrix[3][3]) {
 }
 
 int main() {
+    // Matrix Map
     int matrix[3][3] = {
         {0, 0, 0},
         {0, 0, 0},
@@ -184,7 +183,7 @@ int main() {
     };
 
 
-    //  Player symbol
+    // symbol code
     char playerSymbol;
     char allSymbol[2] = {'x', 'o'};
     int symbol = 1;
@@ -202,27 +201,36 @@ int main() {
         symbol = 2;
         symbol2 = 1;
     }
+
     
     displayMatrix(matrix);
+
+
     while (1) {
         
+        // get user code (Ex: A1, B3, C2, etc)
         char code[2];
-
         printf("> ");
         scanf(" %c%c", &code[0], &code[1]);
 
+        // verify all input value
         char sBotChoice[2];
-        
 
         if (checkUserInput(code)) {
             int correct = updateMatrix(matrix, code);
             if (correct != -1) {
+                
+                // change 0 to user symbol
                 matrix[((int)(code[1]-'0')-1)][correct] = symbol;
 
+                // bot choice in the matrix
                 int iBotChoice = botChoice(matrix);
                 sprintf(sBotChoice, "%d", iBotChoice);
 
+                // change 0 to bot symbol
                 matrix[(sBotChoice[0]-'0')][(sBotChoice[1]-'0')] = symbol2;
+
+                // if bot or player win == break game loop
                 if (checkMatrix(matrix)) {
                     break;
                 }
